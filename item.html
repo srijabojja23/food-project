@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Details</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body class="bg-light">
+    <div class="container mt-5">
+        <div class="card shadow-lg" id="recipe-container" style="transform: scale(0.6);">
+            <div class="card-body">
+                <p class="text-center">Loading recipe details...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function fetchRecipe() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const recipeId = urlParams.get('id'); 
+            const jsonUrl = 'recipes.json'; 
+
+            try {
+                const response = await fetch(jsonUrl);
+                const data = await response.json();
+                
+
+                const recipe = data.recipes.find(r => r.id == recipeId);
+
+                if (!recipe) {
+                    throw new Error('Recipe not found');
+                }
+
+                const recipeContainer = document.getElementById('recipe-container');
+                recipeContainer.innerHTML = `
+                    <img src="${recipe.image}" class="card-img-top rounded" alt="${recipe.name}">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">${recipe.name}</h5>
+                        <p class="text-muted text-center">${recipe.cuisine} Cuisine | ${recipe.caloriesPerServing} Calories/Serving</p>
+                        <p><strong>Difficulty:</strong> ${recipe.difficulty}</p>
+                        <p><strong>Prep Time:</strong> ${recipe.prepTimeMinutes} mins | <strong>Cook Time:</strong> ${recipe.cookTimeMinutes} mins</p>
+                        <h6 class="mt-4">Ingredients:</h6>
+                        <ul class="list-group list-group-flush">
+                            ${recipe.ingredients.map(ingredient => `<li class="list-group-item">${ingredient}</li>`).join('')}
+                        </ul>
+                        <h6 class="mt-4">Instructions:</h6>
+                        <ol class="list-group list-group-numbered">
+                            ${recipe.instructions.map(step => `<li class="list-group-item">${step}</li>`).join('')}
+                        </ol>
+                        <h6 class="mt-4">Tags:</h6>
+                        <span class="badge bg-primary">${recipe.tags.join('</span> <span class="badge bg-primary">')}</span>
+                        <h6 class="mt-4">Rating:</h6>
+                        <p>${recipe.rating} ★ (${recipe.reviewCount} reviews)</p>
+                    </div>
+                `;
+            } catch (error) {
+                console.error('Error fetching recipe:', error);
+                document.getElementById('recipe-container').innerHTML = `
+                    <div class="alert alert-danger text-center">
+                        Failed to load recipe details. Please try again later.
+                    </div>
+                `;
+            }
+        }
+
+        fetchRecipe();
+    </script>
+</body>
+</html>
