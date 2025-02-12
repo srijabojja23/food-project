@@ -3,7 +3,7 @@
       {
         "id": 1,
         "name": "Spaghetti Carbonara",
-        "image": "spaghetti Carbonara.jpg",
+        "image": "https://www.marthastewart.com/thmb/S9xVtnWSHldvxPHKOxEq0bALG-k=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/MSL-338686-spaghetti-carbonara-hero-3x2-69999-560b45d1dd9f4741b717176eff024839.jpeg",
         "difficulty": "Easy",
         "caloriesPerServing": 400,
         "prepTimeMinutes": 10,
